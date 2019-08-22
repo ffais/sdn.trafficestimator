@@ -22,8 +22,8 @@ deploy_dev:
   environment:
     name: develop
   script:
-    kubectl version
-    kubectl set image deployments/trafficestimator-test trafficestimator-test=$CONTAINER_DEV_IMAGE
+    - kubectl version
+    - kubectl set image deployments/trafficestimator-test trafficestimator-test=$CONTAINER_DEV_IMAGE
     # - kubectl config set-cluster nosebit --server="$KUBE_URL" --insecure-skip-tls-verify=true
     # - kubectl config set-credentials admin --username="$KUBE_USER" --password="$KUBE_PASSWORD"
     # - kubectl config set-context default --cluster=nosebit --user=admin
