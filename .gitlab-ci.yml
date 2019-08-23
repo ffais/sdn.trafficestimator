@@ -9,28 +9,21 @@ stages:
 variables:
   CONTAINER_DEV_IMAGE: smartcommunitylab/trafficestimator_test:$CI_COMMIT_SHORT_SHA
 
-build_dev:
+build:
   stage: build
   script:
     - docker login -u $DHUB_USER -p $DHUB_PASS
     - docker build -t $CONTAINER_DEV_IMAGE .
     - docker push $CONTAINER_DEV_IMAGE
 
-deploy_dev:
+deploy:
   stage: deploy
   image: smartcommunitylab/kubectl-alpine:latest
   environment:
     name: develop
   script:
-    - kubectl get deployments -n default
-    - kubectl version
+    - echo "deploy"
     - kubectl -n default set image deployments/trafficestimator-test trafficestimator-test=$CONTAINER_DEV_IMAGE --record=true
-    # - kubectl config set-cluster nosebit --server="$KUBE_URL" --insecure-skip-tls-verify=true
-    # - kubectl config set-credentials admin --username="$KUBE_USER" --password="$KUBE_PASSWORD"
-    # - kubectl config set-context default --cluster=nosebit --user=admin
-    # - kubectl config use-context default
-    # - 'printf "apiVersion: v1\nkind: Secret\n$(kubectl create secret docker-registry gitlab-registry --docker-server=$CI_REGISTRY --docker-username=$CI_REGISTRY_USER --docker-password=$CI_REGISTRY_PASSWORD --docker-email=$GITLAB_USER_EMAIL -o yaml --dry-run)" | kubectl apply -f -'
-    # - sed 's/_APP_NAME_/'"$CI_PROJECT_NAME"'/g; s/_VERSION_/'"$CI_COMMIT_SHA"'/g' kubernetes.tpl.yml > kubernetes.yml;
-    # - kubectl apply -f kubernetes.yml
+    - kubectl rollout status deployment trafficestimator-test
   only:
     - master
