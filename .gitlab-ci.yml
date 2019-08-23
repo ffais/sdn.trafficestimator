@@ -24,6 +24,6 @@ deploy:
   script:
     - echo "deploy"
     - kubectl -n default set image deployments/trafficestimator-test trafficestimator-test=$CONTAINER_DEV_IMAGE --record=true
-    - kubectl rollout status deployment trafficestimator-test
+    - kubectl -n default rollout status deployment trafficestimator-test
   only:
     - master
