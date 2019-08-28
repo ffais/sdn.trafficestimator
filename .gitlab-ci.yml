@@ -3,7 +3,7 @@ services:
   - docker:dind
 variables:
   DOCKER_DRIVER: overlay
-  
+
 stages:
   - build
   - deploy
@@ -14,6 +14,7 @@ variables:
 build:
   stage: build
   script:
+    - docker -v
     - docker login -u $DHUB_USER -p $DHUB_PASS
     - docker build -t $CONTAINER_DEV_IMAGE .
     - docker push $CONTAINER_DEV_IMAGE
