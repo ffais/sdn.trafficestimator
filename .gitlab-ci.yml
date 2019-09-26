@@ -2,8 +2,6 @@ image: docker:latest
 
 variables:
   DOCKER_DRIVER: overlay
-  DOCKER_HOST: tcp://localhost:2375
-  DOCKER_TLS_CERTDIR: ""
 
 stages:
   - build
