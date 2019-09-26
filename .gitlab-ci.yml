@@ -1,4 +1,6 @@
 image: docker:latest
+services:
+  - docker:dind
 variables:
   DOCKER_DRIVER: overlay
 
@@ -8,22 +10,26 @@ stages:
 
 variables:
   CONTAINER_DEV_IMAGE: smartcommunitylab/trafficestimator_test:$CI_COMMIT_SHORT_SHA
-
+before_script:
+  - docker info
+  - ls /cache
 build:
   stage: build
   script:
     - docker login -u $DHUB_USER -p $DHUB_PASS
     - DOCKER_BUILDKIT=1 docker build -f Dockerfile-experimental -t $CONTAINER_DEV_IMAGE .
     - docker push $CONTAINER_DEV_IMAGE
+    - touch /cache/$COINTAINER_DEV_IMAGE
+    - ls cache
 
-deploy:
-  stage: deploy
-  image: smartcommunitylab/kubectl-alpine:latest
-  environment:
-    name: develop
-  script:
-    - echo "deploy"
-    - kubectl -n default set image deployments/trafficestimator-test trafficestimator-test=$CONTAINER_DEV_IMAGE --record=true
-    - kubectl -n default rollout status deployment trafficestimator-test
-  only:
-    - master
+# deploy:
+#   stage: deploy
+#   image: smartcommunitylab/kubectl-alpine:latest
+#   environment:
+#     name: develop
+#   script:
+#     - echo "deploy"
+#     - kubectl -n default set image deployments/trafficestimator-test trafficestimator-test=$CONTAINER_DEV_IMAGE --record=true
+#     - kubectl -n default rollout status deployment trafficestimator-test
+#   only:
+#     - master
