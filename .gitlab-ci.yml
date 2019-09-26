@@ -2,6 +2,7 @@ image: docker:latest
 
 variables:
   DOCKER_DRIVER: overlay
+  DOCKER_TLS_CERTDIR: ""
 
 stages:
   - build
