@@ -3,6 +3,9 @@ services:
   - docker:dind
 variables:
   DOCKER_DRIVER: overlay
+  DOCKER_HOST: tcp://localhost:2375
+  DOCKER_TLS_CERTDIR: ""
+
 
 stages:
   - build
@@ -12,15 +15,15 @@ variables:
   CONTAINER_DEV_IMAGE: smartcommunitylab/trafficestimator_test:$CI_COMMIT_SHORT_SHA
 before_script:
   - docker info
-  - ls /cache
 build:
   stage: build
   script:
     - docker login -u $DHUB_USER -p $DHUB_PASS
     - DOCKER_BUILDKIT=1 docker build -f Dockerfile-experimental -t $CONTAINER_DEV_IMAGE .
     - docker push $CONTAINER_DEV_IMAGE
+    - ls /cache
     - touch /cache/$COINTAINER_DEV_IMAGE
-    - ls cache
+    - ls /cache
 
 # deploy:
 #   stage: deploy
