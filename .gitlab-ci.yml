@@ -12,6 +12,7 @@ variables:
   CONTAINER_DEV_IMAGE: smartcommunitylab/trafficestimator_test:$CI_COMMIT_SHORT_SHA
 before_script:
   - docker info
+  - ipaddr
 build:
   stage: build
   script:
