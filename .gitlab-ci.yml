@@ -1,8 +1,8 @@
 image: docker:latest
 
 variables:
-  DOCKER_DRIVER: overlay
-  DOCKER_HOST: tcp://172.17.0.2:2375
+  DOCKER_DRIVER: "overlay"
+  DOCKER_HOST: "tcp://172.17.0.2:2375/"
   DOCKER_TLS_CERTDIR: ""
 
 stages:
