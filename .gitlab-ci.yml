@@ -1,27 +1,32 @@
 image: docker:latest
-
+services:
+  - docker:dind
 variables:
-  DOCKER_DRIVER: "overlay"
-  DOCKER_HOST: "tcp://172.17.0.2:2375/"
-  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay
 
 stages:
+  - prepare
   - build
   - deploy
 
 variables:
   CONTAINER_DEV_IMAGE: smartcommunitylab/trafficestimator_test:$CI_COMMIT_SHORT_SHA
+  
 before_script:
   - docker info
+
+prepare_prod:
+  stage: prepare
+  script:
+    - sed -i -e 's/# TrafficEstimator/# TrafficEstimator Prod/g' ./README.md
+  only:
+    - prod
 build:
   stage: build
   script:
     - docker login -u $DHUB_USER -p $DHUB_PASS
     - DOCKER_BUILDKIT=1 docker build -f Dockerfile-experimental -t $CONTAINER_DEV_IMAGE .
     - docker push $CONTAINER_DEV_IMAGE
-    - ls /cache
-    - touch /cache/$COINTAINER_DEV_IMAGE
-    - ls /cache
 
 # deploy:
 #   stage: deploy
