@@ -11,7 +11,7 @@ stages:
 
 variables:
   CONTAINER_DEV_IMAGE: smartcommunitylab/trafficestimator_test:$CI_COMMIT_SHORT_SHA
-  
+
 before_script:
   - docker info
 
@@ -26,7 +26,8 @@ build:
   script:
     - docker login -u $DHUB_USER -p $DHUB_PASS
     - DOCKER_BUILDKIT=1 docker build -f Dockerfile-experimental -t $CONTAINER_DEV_IMAGE .
-    - docker push $CONTAINER_DEV_IMAGE
+    - docker run --rm $CONTAINER_DEV_IMAG cat /home/traffic/app/README.md
+#    - docker push $CONTAINER_DEV_IMAGE
 
 # deploy:
 #   stage: deploy
