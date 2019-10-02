@@ -4,6 +4,7 @@ COPY ./pom.xml /tmp/traffic/pom.xml
 COPY ./src /tmp/traffic/src
 WORKDIR /tmp/traffic
 RUN mvn clean install -Dmaven.test.skip=true
+COPY ./README.md tmp/traffic/target/README.md
 
 FROM adoptopenjdk/openjdk11:alpine
 ENV FOLDER=/tmp/traffic/target
@@ -20,6 +21,6 @@ RUN  addgroup -g ${USER_GROUP_ID} ${USER_GROUP}; \
 WORKDIR  /home/${USER}/app
 RUN chown ${USER}:${USER_GROUP} /home/${USER}/app
 COPY --from=mvn --chown=traffic:traffic ${FOLDER}/${APP} /home/${USER}/app/traffic.jar
-COPY --chown=traffic:traffic ./README.md /home/${USER}/app/README.md
+COPY --chown=traffic:traffic ${FOLDER}/README.md /home/${USER}/app/README.md
 USER traffic
 CMD ["java", "-jar", "traffic.jar"]
