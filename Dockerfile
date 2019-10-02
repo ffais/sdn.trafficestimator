@@ -23,6 +23,6 @@ RUN  addgroup -g ${USER_GROUP_ID} ${USER_GROUP}; \
 WORKDIR  /home/${USER}/app
 RUN chown ${USER}:${USER_GROUP} /home/${USER}/app
 COPY --from=mvn --chown=traffic:traffic ${FOLDER}/${APP} /home/${USER}/app/traffic.jar
-COPY --chown=traffic:traffic ${FOLDER}/README.md /home/${USER}/app/README.md
+COPY --from=mvn --chown=traffic:traffic ${FOLDER}/README.md /home/${USER}/app/README.md
 USER traffic
 CMD ["java", "-jar", "traffic.jar"]
