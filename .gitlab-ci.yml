@@ -19,6 +19,7 @@ prepare_prod:
   stage: prepare
   script:
     - sed -i -e 's/# TrafficEstimator/# TrafficEstimator Prod/g' ./README.md
+    - cat README.md
   only:
     - prod
 build:
